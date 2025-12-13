@@ -1,0 +1,186 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <world name="imu_test_world">
+    <!-- Ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    
+    <!-- Sun for lighting -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    
+    <!-- Humanoid robot with IMU -->
+    <model name="humanoid_with_imu">
+      <pose>0 0 1 0 0 0</pose>
+      
+      <!-- Torso with IMU -->
+      <link name="torso">
+        <inertial>
+          <mass value="10.0"/>
+          <origin xyz="0 0 0.5" rpy="0 0 0"/>
+          <inertia ixx="0.5" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="0.1"/>
+        </inertial>
+        
+        <visual>
+          <origin xyz="0 0 0.5" rpy="0 0 0"/>
+          <geometry>
+            <box size="0.3 0.3 1.0"/>
+          </geometry>
+          <material name="blue">
+            <color rgba="0 0 1 0.8"/>
+          </material>
+        </visual>
+        
+        <collision>
+          <origin xyz="0 0 0.5" rpy="0 0 0"/>
+          <geometry>
+            <box size="0.3 0.3 1.0"/>
+          </geometry>
+        </collision>
+      </link>
+      
+      <!-- Head -->
+      <joint name="neck_joint" type="fixed">
+        <parent link="torso"/>
+        <child link="head"/>
+        <origin xyz="0 0 1.0" rpy="0 0 0"/>
+      </joint>
+      
+      <link name="head">
+        <inertial>
+          <mass value="2.0"/>
+          <inertia ixx="0.02" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.02"/>
+        </inertial>
+        
+        <visual>
+          <geometry>
+            <sphere radius="0.15"/>
+          </geometry>
+          <material name="white">
+            <color rgba="1 1 1 0.8"/>
+          </material>
+        </visual>
+        
+        <collision>
+          <geometry>
+            <sphere radius="0.15"/>
+          </geometry>
+        </collision>
+      </link>
+      
+      <!-- IMU sensor definition in torso -->
+      <sensor name="imu" type="imu">
+        <pose>0 0 0.2 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>100</update_rate>
+        <topic>imu/data</topic>
+        <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+          <ros>
+            <namespace>/humanoid</namespace>
+            <remapping>~/out:=imu/data</remapping>
+          </ros>
+          <frame_name>torso</frame_name>
+          <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        </plugin>
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.001</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.001</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.001</stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.017</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.017</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.017</stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+      
+      <!-- Add some movable elements to test IMU -->
+      <model name="movable_box">
+        <pose>2 0 0.5 0 0 0</pose>
+        <link name="link">
+          <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.083" ixy="0.0" ixz="0.0" iyy="0.083" iyz="0.0" izz="0.083"/>
+          </inertial>
+          
+          <visual>
+            <geometry>
+              <box size="1 1 1"/>
+            </geometry>
+            <material name="red">
+              <color rgba="1 0 0 0.8"/>
+            </material>
+          </visual>
+          
+          <collision>
+            <geometry>
+              <box size="1 1 1"/>
+            </geometry>
+          </collision>
+        </link>
+      </model>
+    </model>
+    
+    <!-- Inclined plane to test IMU readings -->
+    <model name="inclined_plane">
+      <pose>-3 0 0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass value="100.0"/>
+          <inertia ixx="100.0" ixy="0.0" ixz="0.0" iyy="100.0" iyz="0.0" izz="100.0"/>
+        </inertial>
+        
+        <visual>
+          <pose>0 0 0 0 0.2 0</pose>
+          <geometry>
+            <box size="3 4 0.1"/>
+          </geometry>
+          <material name="gray">
+            <color rgba="0.5 0.5 0.5 0.8"/>
+          </material>
+        </visual>
+        
+        <collision>
+          <pose>0 0 0 0 0.2 0</pose>
+          <geometry>
+            <box size="3 4 0.1"/>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+  </world>
+</sdf>

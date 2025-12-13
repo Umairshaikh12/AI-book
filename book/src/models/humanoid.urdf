@@ -1,0 +1,337 @@
+<?xml version="1.0"?>
+<robot name="simple_humanoid">
+  <!-- Torso -->
+  <link name="torso">
+    <visual>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 1.0"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 1.0"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10.0"/>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <inertia ixx="0.5" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="0.1"/>
+    </inertial>
+  </link>
+
+  <!-- Head -->
+  <joint name="neck_joint" type="fixed">
+    <parent link="torso"/>
+    <child link="head"/>
+    <origin xyz="0 0 1.0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="head">
+    <visual>
+      <geometry>
+        <sphere radius="0.15"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.02" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.02"/>
+    </inertial>
+  </link>
+
+  <!-- Left Arm -->
+  <joint name="left_shoulder_joint" type="revolute">
+    <parent link="torso"/>
+    <child link="left_upper_arm"/>
+    <origin xyz="0.2 0 0.7" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="left_upper_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="left_elbow_joint" type="revolute">
+    <parent link="left_upper_arm"/>
+    <child link="left_lower_arm"/>
+    <origin xyz="0 0 -0.4" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="left_lower_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.04"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.4" radius="0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.8"/>
+      <inertia ixx="0.008" ixy="0.0" ixz="0.0" iyy="0.008" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- Right Arm (similar to left arm) -->
+  <joint name="right_shoulder_joint" type="revolute">
+    <parent link="torso"/>
+    <child link="right_upper_arm"/>
+    <origin xyz="-0.2 0 0.7" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="right_upper_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="right_elbow_joint" type="revolute">
+    <parent link="right_upper_arm"/>
+    <child link="right_lower_arm"/>
+    <origin xyz="0 0 -0.4" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="right_lower_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.04"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.4" radius="0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.8"/>
+      <inertia ixx="0.008" ixy="0.0" ixz="0.0" iyy="0.008" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- Left Leg -->
+  <joint name="left_hip_joint" type="revolute">
+    <parent link="torso"/>
+    <child link="left_upper_leg"/>
+    <origin xyz="0.1 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="left_upper_leg">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.06"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.5" radius="0.06"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.002"/>
+    </inertial>
+  </link>
+
+  <joint name="left_knee_joint" type="revolute">
+    <parent link="left_upper_leg"/>
+    <child link="left_lower_leg"/>
+    <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="0" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="left_lower_leg">
+    <visual>
+      <geometry>
+        <cylinder length="0.45" radius="0.05"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.45" radius="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.5"/>
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.002"/>
+    </inertial>
+  </link>
+
+  <joint name="left_ankle_joint" type="revolute">
+    <parent link="left_lower_leg"/>
+    <child link="left_foot"/>
+    <origin xyz="0 0 -0.45" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.5" upper="0.5" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="left_foot">
+    <visual>
+      <geometry>
+        <box size="0.2 0.1 0.05"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.1 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.002" iyz="0.0" izz="0.002"/>
+    </inertial>
+  </link>
+
+  <!-- Right Leg (similar to left leg) -->
+  <joint name="right_hip_joint" type="revolute">
+    <parent link="torso"/>
+    <child link="right_upper_leg"/>
+    <origin xyz="-0.1 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="right_upper_leg">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.06"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.5" radius="0.06"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.002"/>
+    </inertial>
+  </link>
+
+  <joint name="right_knee_joint" type="revolute">
+    <parent link="right_upper_leg"/>
+    <child link="right_lower_leg"/>
+    <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="0" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="right_lower_leg">
+    <visual>
+      <geometry>
+        <cylinder length="0.45" radius="0.05"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.45" radius="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.5"/>
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.002"/>
+    </inertial>
+  </link>
+
+  <joint name="right_ankle_joint" type="revolute">
+    <parent link="right_lower_leg"/>
+    <child link="right_foot"/>
+    <origin xyz="0 0 -0.45" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.5" upper="0.5" effort="100.0" velocity="1.0"/>
+  </joint>
+
+  <link name="right_foot">
+    <visual>
+      <geometry>
+        <box size="0.2 0.1 0.05"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.1 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.002" iyz="0.0" izz="0.002"/>
+    </inertial>
+  </link>
+</robot>

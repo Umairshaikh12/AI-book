@@ -1,0 +1,80 @@
+# Perception System Architecture
+
+## Overview
+This diagram illustrates the architecture of a perception system for humanoid robots, showing how different sensors and processing modules interact to enable environmental understanding.
+
+```
+                               Perception System Architecture
+                              ┌─────────────────────────────────────────┐
+                              │              HUMANOID ROBOT             │
+                              └─────────────────────────────────────────┘
+                                         │
+                    ┌────────────────────┼────────────────────┐
+                    ▼                    ▼                    ▼
+            ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+            │   Sensor Layer  │  │  Processing     │  │ Decision &      │
+            │                 │  │  Layer          │  │ Control Layer   │
+            └─────────────────┘  └─────────────────┘  └─────────────────┘
+                    │                    │                    │
+            ┌───────┼───────┐    ┌───────┼───────┐    ┌───────┼───────┐
+            ▼       ▼       ▼    ▼       ▼       ▼    ▼       ▼       ▼
+    ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
+    │  LiDAR  │ │  IMU    │ │ Camera  │ │  SLAM   │ │ Object  │ │ Motion  │
+    │         │ │         │ │         │ │         │ │ Detect  │ │ Planner │
+    │ 360°    │ │ Accel/  │ │ RGB/    │ │ Mapping │ │ & Class │ │         │
+    │ Range   │ │ Gyro/   │ │ Depth   │ │ &       │ │         │ │ Path    │
+    │ Scan    │ │ Orient  │ │ Images  │ │ Loc     │ │ Pose    │ │ Planning│
+    └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
+         │           │           │           │           │           │
+         └───────────┼───────────┼───────────┼───────────┼───────────┘
+                     ▼           ▼           ▼           ▼
+              ┌─────────────────────────────────────────────────────┐
+              │              FUSION & INTEGRATION                   │
+              │    (Combine multiple sensor inputs and create      │
+              │     coherent understanding of environment)         │
+              └─────────────────────────────────────────────────────┘
+                                         │
+                    ┌────────────────────┼────────────────────┐
+                    ▼                    ▼                    ▼
+            ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+            │   Mapping       │  │   Localization  │  │   Obstacle      │
+            │                 │  │                 │  │   Avoidance     │
+            │ Global & Local  │  │ Position &      │  │                 │
+            │ Maps            │  │ Orientation     │  │ Dynamic &       │
+            │ (Occupancy,     │  │                 │  │ Static Obstacle │
+            │ Point Cloud)    │  │                 │  │ Detection &     │
+            └─────────────────┘  └─────────────────┘  │ Avoidance       │
+                                                      └─────────────────┘
+                                                                 │
+                                                      ┌─────────────────┐
+                                                      │   Control &     │
+                                                      │   Actuation     │
+                                                      │                 │
+                                                      │ Velocity &      │
+                                                      │ Trajectory      │
+                                                      │ Commands        │
+                                                      └─────────────────┘
+```
+
+## Sensor Layer
+- **LiDAR**: Provides 360-degree range measurements for obstacle detection and mapping
+- **IMU**: Measures acceleration, angular velocity, and orientation for balance and motion estimation
+- **Camera**: Provides visual information for object recognition, depth estimation, and scene understanding
+
+## Processing Layer
+- **SLAM**: Simultaneous Localization and Mapping - builds a map of the environment while tracking robot position
+- **Object Detection**: Identifies and classifies objects in the environment
+- **Motion Planner**: Plans safe and efficient paths around obstacles
+
+## Decision & Control Layer
+- **Fusion & Integration**: Combines data from multiple sensors to create a coherent understanding of the environment
+- **Mapping**: Creates global and local maps of the environment
+- **Localization**: Determines the robot's position and orientation in the environment
+- **Obstacle Avoidance**: Detects and avoids both static and dynamic obstacles
+- **Control & Actuation**: Converts high-level navigation commands to low-level motor commands
+
+## Key Considerations for Humanoid Robots
+- Balance and stability constraints during locomotion
+- Integration with bipedal walking controllers
+- Handling of uneven terrain and obstacles
+- Coordination between perception and balance systems

@@ -1,0 +1,117 @@
+# URDF Structure Diagram
+
+## Overview
+This diagram illustrates the structure of a URDF (Unified Robot Description Format) file for a humanoid robot.
+
+```
+                    URDF Robot Model
+                   ┌─────────────────┐
+                   │   Robot Name    │
+                   └─────────┬───────┘
+                             │
+         ┌───────────────────┼───────────────────┐
+         ▼                   ▼                   ▼
+    ┌─────────┐         ┌─────────┐         ┌─────────┐
+    │  Links  │         │ Joints  │         │ Materials│
+    └─────────┘         └─────────┘         └─────────┘
+         │                   │                   │
+    ┌────┴────┐        ┌─────┴─────┐        ┌───┴───┐
+    ▼         ▼        ▼           ▼        ▼       ▼
+┌───────┐ ┌───────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌─────┐
+│Visual │ │Collision│ │Parent│ │Child │ │Color │ │Texture│
+│Geometry│ │Geometry │ │Link  │ │Link  │ │RGBA  │ │File │
+│Origin │ │Origin  │ │Type  │ │Origin│ │Name  │ │     │
+└───────┘ └───────┘ └──────┘ └──────┘ └──────┘ └─────┘
+    │         │         │       │         │       │
+    └─────────┼─────────┼───────┼─────────┼───────┘
+              ▼         ▼       ▼         ▼
+         ┌─────────────────────────────────────────┐
+         │           Inertial Properties           │
+         │  (Mass, Center of Mass, Inertia)       │
+         └─────────────────────────────────────────┘
+```
+
+## Example Humanoid URDF Structure
+
+```
+<robot name="simple_humanoid">
+  <!-- Materials Definition -->
+  <material name="blue">
+    <color rgba="0 0 1 0.8"/>
+  </material>
+  
+  <!-- Torso Link -->
+  <link name="torso">
+    <visual>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 1.0"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.3 0.3 1.0"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10.0"/>
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <inertia ixx="0.5" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="0.1"/>
+    </inertial>
+  </link>
+
+  <!-- Joint connecting head to torso -->
+  <joint name="neck_joint" type="fixed">
+    <parent link="torso"/>
+    <child link="head"/>
+    <origin xyz="0 0 1.0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Head Link -->
+  <link name="head">
+    <visual>
+      <geometry>
+        <sphere radius="0.15"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.02" ixy="0.0" ixz="0.0" iyy="0.02" iyz="0.0" izz="0.02"/>
+    </inertial>
+  </link>
+  
+  <!-- Additional joints and links for arms, legs, etc. -->
+  ...
+</robot>
+```
+
+## Key Components Explained
+
+### Links
+- Represent rigid bodies of the robot
+- Each link can have:
+  - Visual: How the link looks in simulation/visualization
+  - Collision: How the link interacts with physics simulation
+  - Inertial: Physical properties for simulation
+
+### Joints
+- Connect links together
+- Define how links can move relative to each other
+- Types: fixed, revolute, continuous, prismatic, floating, planar
+
+### Materials
+- Define visual appearance
+- Include color and texture properties
+
+### Coordinate Systems
+- Uses right-handed coordinate system (X forward, Y left, Z up)
+- Origin is the reference point for each link
+- RPY (Roll, Pitch, Yaw) defines orientation

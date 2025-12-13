@@ -1,0 +1,161 @@
+# System Integration Architecture
+
+## Overview
+This document describes the system integration architecture for the Physical AI & Humanoid Robotics course capstone project. The system integrates multiple technologies including ROS 2, Whisper for voice recognition, Large Language Models for action planning, and Gazebo simulation.
+
+## High-Level Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    CAPSTONE ROBOT SYSTEM                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐         │
+│  │  VISION-LANG-   │  │  AI-ROBOT     │  │  DIGITAL TWIN   │         │
+│  │  ACTION (VLA)   │  │  BRAIN        │  │                 │         │
+│  │                 │  │               │  │  ┌─────────────┐ │         │
+│  │  • Whisper      │  │  • Isaac Sim  │  │  │   Gazebo    │ │         │
+│  │    voice        │  │  • Isaac ROS  │  │  │   Simula-   │ │         │
+│  │    processing   │  │    perception │  │  │   tion      │ │         │
+│  │  • LLM action   │  │  • Nav2       │  │  │             │ │         │
+│  │    planning     │  │    navigation │  │  └─────────────┘ │         │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘         │
+│           │                      │                        │            │
+│           └──────────────────────┼────────────────────────┘            │
+│                                  │                                     │
+│  ┌─────────────────────────────────────────────────────────────────┐  │
+│  │                        ROS 2 CORE                              │  │
+│  │  • Nodes & Communication                                       │  │
+│  │  • Message Passing                                             │  │
+│  │  • Services & Actions                                          │  │
+│  │  • Parameter Server                                            │  │
+│  └─────────────────────────────────────────────────────────────────┘  │
+│                                  │                                     │
+│  ┌─────────────────────────────────────────────────────────────────┐  │
+│  │                      HUMANOID ROBOT                           │  │
+│  │  • Hardware Abstraction                                        │  │
+│  │  • Motion Control                                              │  │
+│  │  • Sensor Integration                                          │  │
+│  └─────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+## Voice Command Processing Flow
+
+```
+User Speech → Audio Capture → Whisper → Text → LLM Planning → ROS Actions → Robot Execution
+     ↓              ↓            ↓        ↓          ↓            ↓             ↓
+  Microphone    AudioData   Transcribe  Command   Plan Action   Execute      Response
+   Node         Node         Node      Parser     Node         Node        Node
+```
+
+## Data Flow Architecture
+
+```
+┌─────────────────────────────────────┐
+│          INPUT PROCESSING           │
+├─────────────────────────────────────┤
+│  Voice Commands (Audio)             │
+│  └─► Audio Capture Node             │
+│      └─► Audio Preprocessing        │
+│          └─► Whisper Transcription  │
+│              └─► Text Output        │
+└─────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────┐
+│        COMMAND INTERPRETATION       │
+├─────────────────────────────────────┤
+│  Command Parser                     │
+│  └─► Natural Language Processing    │
+│      └─► Intent Recognition         │
+│          └─► Action Planning        │
+│              └─► Structured Commands│
+└─────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────┐
+│        ACTION EXECUTION             │
+├─────────────────────────────────────┤
+│  Navigation System                  │
+│  └─► Path Planning                  │
+│      └─► Motion Control             │
+│          └─► Robot Movement         │
+│                                     │
+│  Manipulation System                │
+│  └─► Grasp Planning                 │
+│      └─► Arm Control                │
+│          └─► End Effector Control   │
+└─────────────────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────┐
+│         FEEDBACK LOOP               │
+├─────────────────────────────────────┤
+│  Action Results                     │
+│  └─► Status Updates                 │
+│      └─► Success/Failure Reports    │
+│          └─► User Feedback          │
+└─────────────────────────────────────┘
+```
+
+## ROS Message Flow
+
+```
+┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
+│   Audio Capture     │────│  Whisper Processing │────│ Command Interpreter │
+│      Node           │    │       Node          │    │        Node         │
+│                     │    │                     │    │                     │
+│ Publish:            │    │ Publish:            │    │ Publish:            │
+│ - sensor_msgs/      │    │ - std_msgs/String   │    │ - std_msgs/String   │
+│   AudioData         │    │   (transcribed)     │    │   (structured cmd)  │
+│                     │    │                     │    │                     │
+│ Subscribe:          │    │ Subscribe:          │    │ Subscribe:          │
+│ - None              │    │ - sensor_msgs/      │    │ - std_msgs/String   │
+│                     │    │   AudioData         │    │   (transcribed)     │
+└─────────────────────┘    └─────────────────────┘    └─────────────────────┘
+         │                           │                           │
+         │                           ▼                           ▼
+         │                ┌─────────────────────┐    ┌─────────────────────┐
+         │                │   LLM Action        │────│   Navigation        │
+         │                │    Planner Node     │    │      Node           │
+         │                │                     │    │                     │
+         │                │ Publish:            │    │ Publish:            │
+         │                │ - geometry_msgs/    │    │ - geometry_msgs/    │
+         │                │   PoseStamped       │    │   PoseStamped       │
+         │                │   (navigation goal) │    │                     │
+         │                │                     │    │ Subscribe:          │
+         │                │ Subscribe:          │    │ - std_msgs/String   │
+         │                │ - std_msgs/String   │    │   (structured cmd)  │
+         └────────────────►   (structured cmd)  │    └─────────────────────┘
+                          └─────────────────────┘
+```
+
+## System Dependencies and Interfaces
+
+### External Dependencies
+- OpenAI Whisper (speech recognition)
+- Large Language Model API (command planning)
+- Gazebo/Isaac Sim (simulation environment)
+- ROS 2 Navigation Stack (Nav2)
+- Robot hardware interfaces
+
+### Internal Components
+- Voice recognition module
+- Natural language understanding
+- Action planning system
+- Navigation system
+- Manipulation system
+- Integration coordinator
+
+## Performance Requirements
+- Response time to voice commands: < 5 seconds
+- Task completion success rate: > 75%
+- System reliability and uptime: > 95%
+- User satisfaction with naturalness of interaction
+
+## Safety Considerations
+- Collision avoidance during navigation
+- Safe manipulation force limits
+- Emergency stop mechanisms
+- Command validation before execution

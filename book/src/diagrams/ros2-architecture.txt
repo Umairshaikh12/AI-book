@@ -1,0 +1,65 @@
+# ROS 2 Architecture Diagram
+
+## Overview
+This diagram illustrates the architecture of ROS 2, showing the relationship between different components.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    ROS 2 Ecosystem                          │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │   Node A    │  │   Node B    │  │   Node C    │         │
+│  │             │  │             │  │             │         │
+│  │ Publishers  │  │ Subscribers │  │ Services    │         │
+│  │  • topic1   │  │  • topic1   │  │  • service1 │         │
+│  │  • topic2   │  │  • topic2   │  │  • service2 │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
+│           │               │                │                │
+│           └─────────┬─────┴────────────────┘                │
+│                     │                                       │
+│         ┌───────────▼───────────┐                           │
+│         │     DDS/RMW Layer     │                           │
+│         │  (Data Distribution   │                           │
+│         │   Service/            │                           │
+│         │   Repository &        │                           │
+│         │   Middleware)         │                           │
+│         └───────────┬───────────┘                           │
+│                     │                                       │
+│         ┌───────────▼───────────┐                           │
+│         │   ROS 2 Client        │                           │
+│         │     Libraries         │                           │
+│         │   (rclcpp, rclpy,     │                           │
+│         │    rcl, etc.)         │                           │
+│         └───────────┬───────────┘                           │
+│                     │                                       │
+│         ┌───────────▼───────────┐                           │
+│         │   Operating System    │                           │
+│         │  (Linux, Windows,     │                           │
+│         │   macOS, etc.)        │                           │
+│         └───────────────────────┘                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Components Explained
+
+### Nodes
+- The basic unit of computation in ROS 2
+- Each node performs a specific task
+- Nodes communicate with each other through topics, services, and actions
+
+### DDS/RMW Layer
+- Data Distribution Service / Repository & Middleware
+- Handles the underlying message passing
+- Provides QoS (Quality of Service) policies
+- Supports multiple implementations (Fast DDS, Cyclone DDS, etc.)
+
+### Client Libraries
+- rclcpp (C++)
+- rclpy (Python)
+- rcl (C)
+- Provide the ROS 2 API for developers
+
+### Communication Patterns
+1. **Topics** - Publish/subscribe pattern for asynchronous communication
+2. **Services** - Request/response pattern for synchronous communication
+3. **Actions** - Goal-based pattern for long-running tasks with feedback

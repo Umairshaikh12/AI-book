@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .node { fill: #e0e0e0; stroke: #333; stroke-width: 2; rx: 10; ry: 10; }
+    .title { font: bold 16px sans-serif; fill: #000; }
+    .label { font: 12px sans-serif; fill: #333; }
+    .arrow { stroke: #666; stroke-width: 2; marker-end: url(#arrowhead); }
+  </style>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+      refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" class="title">Physical AI & Humanoid Robotics System Architecture</text>
+
+  <!-- LLM Action Planning Box -->
+  <rect x="50" y="100" width="200" height="100" class="node"/>
+  <text x="150" y="130" text-anchor="middle" class="title">LLM Action Planner</text>
+  <text x="150" y="150" text-anchor="middle" class="label">(Command Planning)</text>
+
+  <!-- Whisper Processing Box -->
+  <rect x="300" y="100" width="200" height="100" class="node"/>
+  <text x="400" y="130" text-anchor="middle" class="title">Whisper Processing</text>
+  <text x="400" y="150" text-anchor="middle" class="label">(Voice Recognition)</text>
+
+  <!-- Command Interpreter Box -->
+  <rect x="550" y="100" width="200" height="100" class="node"/>
+  <text x="650" y="130" text-anchor="middle" class="title">Command Interpreter</text>
+  <text x="650" y="150" text-anchor="middle" class="label">(NLP & Planning)</text>
+
+  <!-- Navigation Box -->
+  <rect x="150" y="250" width="200" height="100" class="node"/>
+  <text x="250" y="280" text-anchor="middle" class="title">Navigation System</text>
+  <text x="250" y="300" text-anchor="middle" class="label">(Nav2, Path Planning)</text>
+
+  <!-- Manipulation Box -->
+  <rect x="450" y="250" width="200" height="100" class="node"/>
+  <text x="550" y="280" text-anchor="middle" class="title">Manipulation System</text>
+  <text x="550" y="300" text-anchor="middle" class="label">(Grasping, Control)</text>
+
+  <!-- Humanoid Robot Box -->
+  <rect x="300" y="400" width="200" height="100" class="node"/>
+  <text x="400" y="430" text-anchor="middle" class="title">Humanoid Robot</text>
+  <text x="400" y="450" text-anchor="middle" class="label">(Hardware, Sensors)</text>
+
+  <!-- Arrows between Whisper and Command Interpreter -->
+  <line x1="500" y1="150" x2="550" y2="150" class="arrow"/>
+
+  <!-- Arrows from LLM to Navigation -->
+  <line x1="150" y1="200" x2="250" y2="250" class="arrow"/>
+
+  <!-- Arrows from Command Interpreter to Navigation -->
+  <line x1="650" y1="200" x2="550" y2="250" class="arrow"/>
+
+  <!-- Arrows from Navigation and Manipulation to Robot -->
+  <line x1="350" y1="350" x2="375" y2="400" class="arrow"/>
+  <line x1="550" y1="350" x2="425" y2="400" class="arrow"/>
+
+  <!-- User Speech Input -->
+  <ellipse cx="400" cy="50" rx="60" ry="20" class="node"/>
+  <text x="400" y="55" text-anchor="middle" class="label">User Speech</text>
+  <line x1="400" y1="70" x2="400" y2="100" class="arrow"/>
+
+  <!-- Robot Output -->
+  <ellipse cx="400" cy="550" rx="60" ry="20" class="node"/>
+  <text x="400" y="555" text-anchor="middle" class="label">Robot Action</text>
+  <line x1="400" y1="500" x2="400" y2="530" class="arrow"/>
+</svg>

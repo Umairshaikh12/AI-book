@@ -1,0 +1,243 @@
+# API Contract: Course Content Management System
+
+**Feature**: Physical AI & Humanoid Robotics Course Book
+**Date**: 2025-12-11
+**Version**: 1.0.0
+
+## Overview
+
+This API contract defines the interfaces for the course content management system that will support the Physical AI & Humanoid Robotics course book. The system will provide endpoints for accessing course content, tracking student progress, and managing educational resources.
+
+## Content API
+
+### Get Course Structure
+- **Endpoint**: `GET /api/course/structure`
+- **Description**: Retrieves the hierarchical structure of the course (modules, chapters, sections)
+- **Request Parameters**: None
+- **Response**:
+  ```json
+  {
+    "courseId": "physical-ai-humanoid-book",
+    "title": "Physical AI & Humanoid Robotics",
+    "modules": [
+      {
+        "moduleId": "module-1-ros2",
+        "title": "ROS 2 (Robotic Nervous System)",
+        "chapters": [
+          {
+            "chapterId": "ch1-intro-nodes",
+            "title": "Introduction to Nodes, Topics, and Services",
+            "order": 1
+          }
+        ],
+        "order": 1
+      }
+    ]
+  }
+  ```
+- **Error Responses**:
+  - `500`: Internal server error
+
+### Get Module Content
+- **Endpoint**: `GET /api/module/{moduleId}`
+- **Description**: Retrieves the content for a specific module
+- **Path Parameters**:
+  - `moduleId`: The unique identifier for the module
+- **Response**:
+  ```json
+  {
+    "moduleId": "module-1-ros2",
+    "title": "ROS 2 (Robotic Nervous System)",
+    "chapters": [
+      {
+        "chapterId": "ch1-intro-nodes",
+        "title": "Introduction to Nodes, Topics, and Services",
+        "content": "# Chapter 1: Introduction to Nodes...\n\n## Learning Objectives...",
+        "learningObjectives": ["Understand ROS 2 nodes", "Implement basic publishers/subscribers"],
+        "codeExamples": [
+          {
+            "exampleId": "basic-publisher",
+            "title": "Basic Publisher Node",
+            "code": "import rclpy\n...",
+            "language": "python"
+          }
+        ],
+        "exercises": [
+          {
+            "exerciseId": "exercise-1",
+            "title": "Create a Simple Publisher",
+            "description": "Implement a publisher that broadcasts messages to a topic",
+            "difficulty": "beginner"
+          }
+        ]
+      }
+    ]
+  }
+  ```
+- **Error Responses**:
+  - `404`: Module not found
+  - `500`: Internal server error
+
+### Get Chapter Content
+- **Endpoint**: `GET /api/chapter/{chapterId}`
+- **Description**: Retrieves the content for a specific chapter
+- **Path Parameters**:
+  - `chapterId`: The unique identifier for the chapter
+- **Response**:
+  ```json
+  {
+    "chapterId": "ch1-intro-nodes",
+    "title": "Introduction to Nodes, Topics, and Services",
+    "moduleId": "module-1-ros2",
+    "content": "# Chapter 1: Introduction to Nodes...\n\n## Learning Objectives...",
+    "learningObjectives": ["Understand ROS 2 nodes", "Implement basic publishers/subscribers"],
+    "estimatedTime": "45 minutes",
+    "prerequisites": ["Basic Python knowledge", "Understanding of event-driven programming"],
+    "codeExamples": [
+      {
+        "exampleId": "basic-publisher",
+        "title": "Basic Publisher Node",
+        "code": "import rclpy\n...",
+        "language": "python",
+        "tested": true
+      }
+    ],
+    "diagrams": [
+      {
+        "diagramId": "node-architecture",
+        "title": "ROS 2 Node Architecture",
+        "fileReference": "/assets/diagrams/node-architecture.png",
+        "caption": "Diagram showing nodes, topics, and services in ROS 2"
+      }
+    ],
+    "exercises": [
+      {
+        "exerciseId": "exercise-1",
+        "title": "Create a Simple Publisher",
+        "description": "Implement a publisher that broadcasts messages to a topic",
+        "difficulty": "beginner",
+        "estimatedTime": "30 minutes"
+      }
+    ]
+  }
+  ```
+- **Error Responses**:
+  - `404`: Chapter not found
+  - `500`: Internal server error
+
+## Progress Tracking API
+
+### Record Student Progress
+- **Endpoint**: `POST /api/student/progress`
+- **Description**: Records a student's progress in a specific chapter
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <token>`
+- **Request Body**:
+  ```json
+  {
+    "studentId": "student-12345",
+    "chapterId": "ch1-intro-nodes",
+    "progress": 0.75,
+    "status": "in-progress",
+    "lastAccessed": "2025-12-11T10:30:00Z"
+  }
+  ```
+- **Response**: `200 OK`
+- **Error Responses**:
+  - `400`: Invalid request body
+  - `401`: Unauthorized
+  - `500`: Internal server error
+
+### Get Student Progress
+- **Endpoint**: `GET /api/student/{studentId}/progress`
+- **Description**: Retrieves a student's progress across all modules and chapters
+- **Path Parameters**:
+  - `studentId`: The unique identifier for the student
+- **Response**:
+  ```json
+  {
+    "studentId": "student-12345",
+    "overallProgress": 0.3,
+    "modules": [
+      {
+        "moduleId": "module-1-ros2",
+        "progress": 0.6,
+        "chapters": [
+          {
+            "chapterId": "ch1-intro-nodes",
+            "progress": 1.0,
+            "status": "completed",
+            "completedDate": "2025-12-10T14:20:00Z"
+          },
+          {
+            "chapterId": "ch2-service-implementation",
+            "progress": 0.2,
+            "status": "in-progress"
+          }
+        ]
+      }
+    ]
+  }
+  ```
+- **Error Responses**:
+  - `404`: Student not found
+  - `500`: Internal server error
+
+## Resource Management API
+
+### Get Code Examples
+- **Endpoint**: `GET /api/resources/code-examples`
+- **Description**: Retrieves all code examples in the course with their test status
+- **Query Parameters**:
+  - `moduleId` (optional): Filter by module
+  - `tested` (optional): Filter by test status (true/false)
+- **Response**:
+  ```json
+  {
+    "examples": [
+      {
+        "exampleId": "basic-publisher",
+        "title": "Basic Publisher Node",
+        "moduleId": "module-1-ros2",
+        "chapterId": "ch1-intro-nodes",
+        "code": "import rclpy\n...",
+        "language": "python",
+        "tested": true,
+        "testResults": {
+          "lastTested": "2025-12-10T15:30:00Z",
+          "status": "pass",
+          "environment": "ROS 2 Humble"
+        }
+      }
+    ]
+  }
+  ```
+- **Error Responses**:
+  - `500`: Internal server error
+
+### Get Citations
+- **Endpoint**: `GET /api/resources/citations`
+- **Description**: Retrieves all citations used in the course
+- **Query Parameters**:
+  - `moduleId` (optional): Filter by module
+  - `peerReviewed` (optional): Filter by peer review status (true/false)
+- **Response**:
+  ```json
+  {
+    "citations": [
+      {
+        "citationId": "ros2-concept-paper",
+        "title": "ROS 2: Core Concepts and Architecture",
+        "authors": ["Smith, J.", "Doe, A."],
+        "publication": "Journal of Robotics",
+        "year": 2023,
+        "url": "https://doi.org/10.1115/1234567",
+        "peerReviewed": true,
+        "apaFormat": "Smith, J., & Doe, A. (2023). ROS 2: Core Concepts and Architecture. Journal of Robotics."
+      }
+    ]
+  }
+  ```
+- **Error Responses**:
+  - `500`: Internal server error
