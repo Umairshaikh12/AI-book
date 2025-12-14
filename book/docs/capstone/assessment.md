@@ -59,7 +59,7 @@ This rubric provides the evaluation criteria for the Physical AI & Humanoid Robo
 - Navigation is unreliable or not implemented
 - Poor obstacle avoidance
 - Inaccurate localization
-- Navigation success rate <70%
+- Navigation success rate below 70%
 
 ### 3. Object Detection and Perception (20 points)
 
@@ -86,7 +86,7 @@ This rubric provides the evaluation criteria for the Physical AI & Humanoid Robo
 - Object detection is unreliable or not implemented
 - Poor pose estimation
 - Performance highly dependent on conditions
-- Object detection accuracy <70%
+- Object detection accuracy below 70%
 
 ### 4. Manipulation System (20 points)
 
@@ -113,7 +113,7 @@ This rubric provides the evaluation criteria for the Physical AI & Humanoid Robo
 - Manipulation is unreliable or not implemented
 - Poor grasp strategy selection
 - Inaccurate placement of objects
-- Manipulation success rate <70%
+- Manipulation success rate below 70%
 
 ### 5. System Integration (15 points)
 
@@ -167,7 +167,7 @@ This rubric provides the evaluation criteria for the Physical AI & Humanoid Robo
 - B: 80-89 points (Proficient)
 - C: 70-79 points (Developing)
 - D: 60-69 points (Below Expectations)
-- F: <60 points (Unsatisfactory)
+- F: below 60 points (Unsatisfactory)
 
 ## Performance Expectations
 
