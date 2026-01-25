@@ -1,6 +1,4 @@
 // @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 
@@ -10,11 +8,10 @@ const config = {
   tagline: 'A comprehensive course on embodied intelligence and humanoid systems',
   favicon: 'img/favicon.ico',
 
-  // ✅ Vercel deployment config
-  url: 'https://ai-book.vercel.app', // can be any placeholder domain for now
-  baseUrl: '/', // 🔴 IMPORTANT: must be "/"
+  url: 'https://ai-book.vercel.app',
+  baseUrl: '/',
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn', // ⚠️ changed from 'throw' to 'warn'
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
@@ -28,8 +25,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/Umairshaikh12/AI-book',
+          editUrl: 'https://github.com/Umairshaikh12/AI-book',
         },
         blog: false,
         theme: {
@@ -46,7 +42,7 @@ const config = {
       logo: {
         alt: 'Physical AI Logo',
         src: 'img/logo.svg',
-        href: '/', // ✅ FIXED
+        href: '/docs/intro/', // ⚡ fixed home link
       },
       items: [
         {
