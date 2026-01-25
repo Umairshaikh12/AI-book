@@ -11,7 +11,7 @@ const config = {
   url: 'https://ai-book.vercel.app',
   baseUrl: '/',
 
-  onBrokenLinks: 'warn', // ⚠️ changed from 'throw' to 'warn'
+  onBrokenLinks: 'throw', // ⚠️ changed from 'throw' to 'warn'
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
